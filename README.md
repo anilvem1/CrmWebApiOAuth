@@ -39,7 +39,7 @@ h.	Click Done
 i.	Assign Dynamics CRM Online API access rights
 8.	Once done, required permissions should look like below
 
-
+![alt text](https://github.com/anilvem1/CrmWebApiOAuth/blob/master/AzureAD-CRM%20Permissions.png) 
 
 ## Create new Application User in Dynamics 365
 
@@ -59,8 +59,7 @@ a.	Assign the above custom security role to this user account
 11.	Reference:  https://msdn.microsoft.com/en-us/library/mt790170.aspx#bkmk_ManuallyCreateUser  
 12.	Example screenshot below
 
- 
- 
+![alt text](https://github.com/anilvem1/CrmWebApiOAuth/blob/master/CRM%20Application%20User.png) 
  
 ## Connect to Dynamics 365 CRM using Application user account:
 
@@ -80,6 +79,8 @@ c.	Please check in appendix for code sample
       "type": "ActiveDirectoryOAuth"
       }
 4.	This can replace the existing CRM connectors available 
+
+   ![alt text](https://github.com/anilvem1/CrmWebApiOAuth/blob/master/CRM%20API%20Request.png)
  
 5.	Can execute user / saved queries via Web API in a single HTTP request
 6.	Can execute Web API batch / bulk operations are supported (# actions are reduced)
@@ -96,11 +97,13 @@ c.	Please check in appendix for code sample
 1.	No dependency on username / password. More secure with Azure AD client ID / client secret to connect to Dynamics 365 CRM
 2.	Logic App limitations with connector can be mitigated (300 actions per minute). Using this HTTP request approach, we don’t have any limit on number of actions per minute
 3.	Created a Logic App with 10 CRM actions in it and set the recurrence to run every 1 second, 620 actions per minute successful. No errors
-4.	 
-0.	Compared to CRM connector, all available CRM Web API functionality can be used within Logic Apps / Flow
-a.	Ex: WhoAmI, any functions / actions
-b.	Batch / bulk operations
-1.	Any C# code can use this approach of connecting to CRM using Azure AD App credentials (Ex: Azure Function App / Custom APIs)
+
+![alt text](https://github.com/anilvem1/CrmWebApiOAuth/blob/master/CRM%20API%20LA%20Run.png)
+
+    a. Compared to CRM connector, all available CRM Web API functionality can be used within Logic Apps / Flow
+    b.	Ex: WhoAmI, any functions / actions
+    c.	Batch / bulk operations
+5.	Any C# code can use this approach of connecting to CRM using Azure AD App credentials (Ex: Azure Function App / Custom APIs)
 
 ## Appendix:
 1)	CRM connector for Logic Apps can be found here: https://docs.microsoft.com/en-us/azure/connectors/connectors-create-api-crmonline   
