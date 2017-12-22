@@ -3,12 +3,14 @@ Authenticate Dynamics 365 oData /Web API using an Azure Active Directory AppId. 
 
 ## Introducing the Azure AD Application Identity for Dynamics 365 Web API:
  
-Microsoft Dynamics PG recently introduced the ability to authenticate Dynamics 365 oData /Web API using an Azure Active Directory AppId. Together with a client secret, this replaces username and password. This is a great step forward in security. 
+Microsoft Dynamics PG introduced the ability to authenticate Dynamics 365 oData /Web API using an Azure Active Directory AppId. Together with a client secret, this replaces username and password. This is a great step forward in security. This is applicable to all the CRM versions 8.2 and later. 
 
-In a nutshell, it mitigates the risk of having username/password readable and thus less safe. For example, it could look like below:
+In a nutshell, it mitigates the risk of having username/password readable and thus less safe. 
+For example, it could look like below:
 Username: username@domain.com; Password: Password
 
-On the other hand, AppId /Secret is difficult to comprehend making it safer. For example, it could look something like below:
+On the other hand, AppId /Secret is difficult to comprehend making it safer. 
+For example, it could look something like below:
 AppId / Client ID: 82068d67-54a7-4698-a4eb-876dcc70b3c1
 Client Secret: BD”m_hIy461-E!p&;u0l@7sPCab?579LA`iP5ek|5rD]V
 
@@ -22,9 +24,9 @@ This document provides step by step instructions to create and leverage this fea
 2.	Go to Azure Active Directory -> App registrations
 3.	Click New application registration
 4.	Enter the below values
-a.	Name: <Name of the application>
-b.	Type: Web app / API
-c.	Sign-on URL: <Ex: https://Name of application>
+   a.	Name: <Name of the application>
+   b.	Type: Web app / API
+   c.	Sign-on URL: <Ex: https://Name of application>
 5.	Click Create
 6.	Note Client ID aka Application ID
 7.	Assign Dynamics CRM Online API access
