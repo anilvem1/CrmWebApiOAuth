@@ -4,7 +4,7 @@ Authenticate Dynamics 365 oData /Web API using an Azure Active Directory Applica
 
 ## Introducing the Azure AD Application Identity for Dynamics 365 Web API
 
-Microsoft introduced the ability to authenticate Dynamics 365 oData /Web API using an Azure Active Directory Application (Client ID/Client Secret). Azure AD application Together with a client secret, can replace username and password authentication in many scenarios. This is applicable to all the CRM versions 8.2 and later.
+Microsoft introduced the ability to authenticate Dynamics 365 oData /Web API using an Azure Active Directory Application (Client ID/Client Secret). Azure AD application together with a client secret, can replace username and password authentication in many scenarios. This is applicable to all the CRM versions 8.2 and later.
 
 In a nutshell, it mitigates the risk of having username/password readable and thus less safe.
 For example, it could look like below:
