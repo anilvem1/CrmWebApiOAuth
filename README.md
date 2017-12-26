@@ -1,10 +1,10 @@
 # CrmWebApiOAuth
 
-Authenticate Dynamics 365 oData /Web API using an Azure Active Directory AppId. Together with a client secret, this replaces username and password.
+Authenticate Dynamics 365 oData /Web API using an Azure Active Directory Application Client ID / Client secret.
 
 ## Introducing the Azure AD Application Identity for Dynamics 365 Web API
 
-Microsoft Dynamics PG introduced the ability to authenticate Dynamics 365 oData /Web API using an Azure Active Directory AppId. Together with a client secret, this replaces username and password. This is a great step forward in security. This is applicable to all the CRM versions 8.2 and later.
+Microsoft introduced the ability to authenticate Dynamics 365 oData /Web API using an Azure Active Directory Application (Client ID/Client Secret). Azure AD application Together with a client secret, can replace username and password authentication in many scenarios. This is applicable to all the CRM versions 8.2 and later.
 
 In a nutshell, it mitigates the risk of having username/password readable and thus less safe.
 For example, it could look like below:
@@ -12,13 +12,13 @@ For example, it could look like below:
     a.Username: username@domain.com
     b.Password: Password
 
-On the other hand, AppId /Secret is difficult to comprehend making it safer.
+On the other hand, Client ID /Client Secret is difficult to comprehend making it safer.
 For example, it could look something like below
 
-    a.AppId / Client ID: 82068d67-54a7-4698-a4eb-876dcc70b3c1
+    a.Client ID: 82068d67-54a7-4698-a4eb-876dcc70b3c1
     b.Client Secret: BD|m_hIy461-E!p&;u0l@7sPCab?579LA`iP5ek|5rD]V
 
-We can perform all Dynamics 365 Web API actions using AppID/ Client Secret instead of using the traditional username/password credentials.
+We can perform all Dynamics 365 Web API actions using Client ID/ Client Secret instead of using the traditional username/password credentials.
 This document provides step by step instructions to create and leverage this feature.
 
 ## Create an Azure AD Application
