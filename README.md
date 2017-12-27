@@ -8,6 +8,7 @@ Microsoft introduced the ability to authenticate Dynamics 365 Web API (OData) us
 
 In a nutshell, it mitigates the risk of having username/password readable and thus less safe.
 For example, it could look like below:
+
 - Username: username@domain.com
 - Password: Password
 
@@ -21,25 +22,25 @@ We can perform all Dynamics 365 Web API actions using Client ID/ Client Secret i
 
 ## Create an Azure AD Application
 
-- Log into Azure portal (https://portal.azure.com)
+- Log into Azure portal <https://portal.azure.com>
 - Go to Azure Active Directory -> App registrations
 - Click New application registration
 - Enter the below values
-    - Name: Name of the application
-    - Type: Web app / API
-    - Sign-on URL: Ex: https://Nameofapplication
+  - Name: Name of the application
+  - Type: Web app / API
+  - Sign-on URL: Ex: <https://Nameofapplication>
 - Click Create
 - Note Client ID aka Application ID
 - Assign Dynamics CRM Online API access
-    - Click All Settings -> Required Permissions
-    - Click Add -> Select an API
-    - Select Dynamics CRM Online (Microsoft.CRM)
-    - Click Select
-    - Click Select permissions
-    - Select the checkbox ‘Access CRM Online as organization users’
-    - Click Select
-    - Click Done
-    - Assign Dynamics CRM Online API access rights
+  - Click All Settings -> Required Permissions
+  - Click Add -> Select an API
+  - Select Dynamics CRM Online (Microsoft.CRM)
+  - Click Select
+  - Click Select permissions
+  - Select the checkbox ‘Access CRM Online as organization users’
+  - Click Select
+  - Click Done
+  - Assign Dynamics CRM Online API access rights
 - Once done, required permissions should look like below
 
 ![alt text](https://github.com/anilvem1/CrmWebApiOAuth/blob/master/AzureAD-CRM%20Permissions.png)
@@ -47,7 +48,7 @@ We can perform all Dynamics 365 Web API actions using Client ID/ Client Secret i
 ## Create new Application User in Dynamics 365
 
 - Log into Dynamics 365 CRM application
-    - Pre-requisite: CRM version 8.2 and later
+  - Pre-requisite: CRM version 8.2 and later
 - Go to Settings -> Security Roles
 - Create a new security role by copying an existing OOB security role (Ex: System Administrator)
 - Go to Settings -> Security -> Users
@@ -59,7 +60,7 @@ We can perform all Dynamics 365 Web API actions using Client ID/ Client Secret i
     - Ex: Full Name: CRM Application User & Primary Email: testemail@xxxxx.com
 - Click Save
 - Assign the above custom security role to this user account
-- Reference:  https://msdn.microsoft.com/en-us/library/mt790170.aspx#bkmk_ManuallyCreateUser
+- Reference:  <https://msdn.microsoft.com/en-us/library/mt790170.aspx#bkmk_ManuallyCreateUser>
 - Example screenshot below
 
 ![alt text](https://github.com/anilvem1/CrmWebApiOAuth/blob/master/CRM%20Application%20User.png)
@@ -67,12 +68,12 @@ We can perform all Dynamics 365 Web API actions using Client ID/ Client Secret i
 ## Connect to Dynamics 365 CRM using Application user account
 
 - C# code:
-    - Connect to Dynamics 365 CRM Web API using client ID/ client secret
-    - Perform Web API operations such as CRUD, Execute and others
-    - Please check in appendix for code sample
+  - Connect to Dynamics 365 CRM Web API using client ID/ client secret
+  - Perform Web API operations such as CRUD, Execute and others
+  - Please check in appendix for code sample
 - Logic App definition:
-    - Using HTTP request type action, we should be able to make a connection to CRM Web API
-        - Here we need to pass the below values to make a successful connection
+  - Using HTTP request type action, we should be able to make a connection to CRM Web API
+    - Here we need to pass the below values to make a successful connection
 
                 "authentication": {
                 "audience": "https://xxxxxxxxxxxx.crm.dynamics.com",
@@ -82,16 +83,16 @@ We can perform all Dynamics 365 Web API actions using Client ID/ Client Secret i
                 "tenant": "tenant.onmicrosoft.com",
                 "type": "ActiveDirectoryOAuth"
                 }
-            
-    - This can replace the existing CRM connectors available
-    - Can execute user / saved queries via Web API in a single HTTP request
-    - Can execute Web API batch / bulk operations are supported (# actions are reduced)
-    - Can execute unbound / bound custom actions via Web API in a single HTTP request
-    - Can execute Saved / user query (FetchXML) via Web API in a single HTTP request
-      - https://xxxxxxxxx.api.crm.dynamics.com/api/data/v8.2/accounts?userQuery=3BB1D60D-D4E1-E711-80FF-3863BB2E0320
-    - Can impersonate with another user if Azure AD App user is not an option while doing CRUD operations in Dynamics 365 CRM
-    - Can also replace triggers when a CRM record is created / updated using Change tracking feature of Dynamics 365 CRM
-    - Almost all Web API operations can be executed in Logic App using this approach without writing any piece of code
+
+  - This can replace the existing CRM connectors available
+  - Can execute user / saved queries via Web API in a single HTTP request
+  - Can execute Web API batch / bulk operations are supported (# actions are reduced)
+  - Can execute unbound / bound custom actions via Web API in a single HTTP request
+  - Can execute Saved / user query (FetchXML) via Web API in a single HTTP request
+    - Ex: <https://xxxxxxxxx.api.crm.dynamics.com/api/data/v8.2/accounts?userQuery=3BB1D60D-D4E1-E711-80FF-3863BB2E0320>
+  - Can impersonate with another user if Azure AD App user is not an option while doing CRUD operations in Dynamics 365 CRM
+  - Can also replace triggers when a CRM record is created / updated using Change tracking feature of Dynamics 365 CRM
+  - Almost all Web API operations can be executed in Logic App using this approach without writing any piece of code
 
 ![alt text](https://github.com/anilvem1/CrmWebApiOAuth/blob/master/CRM%20API%20Request.png)
 
@@ -103,16 +104,17 @@ We can perform all Dynamics 365 Web API actions using Client ID/ Client Secret i
 
 ![alt text](https://github.com/anilvem1/CrmWebApiOAuth/blob/master/CRM%20API%20LA%20Run.png)
 
-   - Compared to CRM connector, all available CRM Web API functionality can be used within Logic Apps / Flow
-   - Ex: WhoAmI, any functions / actions
-   - Batch / bulk operations
+- Compared to CRM connector, all available CRM Web API functionality can be used within Logic Apps / Flow
+  - CRUD operations
+  - Ex: WhoAmI, any functions / actions
+  - Batch / bulk operations
 - Any C# code can use this approach of connecting to CRM using Azure AD App credentials (Ex: Azure Function App / Custom APIs)
 
 ## Appendix
 
-- CRM connector for Logic Apps can be found here: https://docs.microsoft.com/en-us/azure/connectors/connectors-create-api-crmonline
+- CRM connector for Logic Apps can be found here: <https://docs.microsoft.com/en-us/azure/connectors/connectors-create-api-crmonline>
 - Logic Apps examples can be found below
-    - Connect to Dynamics 365 Web API – WhoAmI request:
+  - Connect to Dynamics 365 Web API – WhoAmI request:
 
                     "actions": {
                                 "HTTP": {
@@ -133,7 +135,7 @@ We can perform all Dynamics 365 Web API actions using Client ID/ Client Secret i
                                 }
                     }
 
-    - Connect to Dynamics 365 Web API: Get all changes to an entity via Change Tracking
+  - Connect to Dynamics 365 Web API: Get all changes to an entity via Change Tracking
 
                     "actions": {
                                 "HTTP": {
@@ -158,7 +160,7 @@ We can perform all Dynamics 365 Web API actions using Client ID/ Client Secret i
                                 }
                     }
 
-    - Connect to Dynamics 365 Web API: Batch request
+  - Connect to Dynamics 365 Web API: Batch request
 
                 "actions": {
                             "HTTP": {
@@ -235,7 +237,7 @@ We can perform all Dynamics 365 Web API actions using Client ID/ Client Secret i
                         }
 
 - Sampe C# code to connect to Dynamics 365 Web API
-            
+
             using Newtonsoft.Json.Linq;
             using System;
             using System.Collections.Generic;
