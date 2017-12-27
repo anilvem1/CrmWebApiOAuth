@@ -71,30 +71,29 @@ We can perform all Dynamics 365 Web API actions using Client ID/ Client Secret i
     - Perform Web API operations such as CRUD, Execute and others
     - Please check in appendix for code sample
 - Logic App definition:
-- Using HTTP request type action, we should be able to make a connection to CRM Web API
-    - Here we need to pass the below values to make a successful connection
+    - Using HTTP request type action, we should be able to make a connection to CRM Web API
+        - Here we need to pass the below values to make a successful connection
 
-            "authentication": {
-            "audience": "https://xxxxxxxxxxxx.crm.dynamics.com",
-            "authority": "https://login.windows.net/",
-            "clientId": "Client ID",
-            "secret": "Client Secret",
-            "tenant": "tenant.onmicrosoft.com",
-            "type": "ActiveDirectoryOAuth"
-            }
-        
-- This can replace the existing CRM connectors available
+                "authentication": {
+                "audience": "https://xxxxxxxxxxxx.crm.dynamics.com",
+                "authority": "https://login.windows.net/",
+                "clientId": "Client ID",
+                "secret": "Client Secret",
+                "tenant": "tenant.onmicrosoft.com",
+                "type": "ActiveDirectoryOAuth"
+                }
+            
+    - This can replace the existing CRM connectors available
+    - Can execute user / saved queries via Web API in a single HTTP request
+    - Can execute Web API batch / bulk operations are supported (# actions are reduced)
+    - Can execute unbound / bound custom actions via Web API in a single HTTP request
+    - Can execute Saved / user query (FetchXML) via Web API in a single HTTP request
+      - https://xxxxxxxxx.api.crm.dynamics.com/api/data/v8.2/accounts?userQuery=3BB1D60D-D4E1-E711-80FF-3863BB2E0320
+    - Can impersonate with another user if Azure AD App user is not an option while doing CRUD operations in Dynamics 365 CRM
+    - Can also replace triggers when a CRM record is created / updated using Change tracking feature of Dynamics 365 CRM
+    - Almost all Web API operations can be executed in Logic App using this approach without writing any piece of code
 
 ![alt text](https://github.com/anilvem1/CrmWebApiOAuth/blob/master/CRM%20API%20Request.png)
-
-- Can execute user / saved queries via Web API in a single HTTP request
-- Can execute Web API batch / bulk operations are supported (# actions are reduced)
-- Can execute unbound / bound custom actions via Web API in a single HTTP request
-- Can execute Saved / user query (FetchXML) via Web API in a single HTTP request
-    - https://xxxxxxxxx.api.crm.dynamics.com/api/data/v8.2/accounts?userQuery=3BB1D60D-D4E1-E711-80FF-3863BB2E0320
-- Can impersonate with another user if Azure AD App user is not an option while doing CRUD operations in Dynamics 365 CRM
-- Can also replace triggers when a CRM record is created / updated using Change tracking feature of Dynamics 365 CRM
-- Almost all Web API operations can be executed in Logic App using this approach without writing any piece of code
 
 ## Observations / Benefits
 
