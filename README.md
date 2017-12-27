@@ -73,14 +73,16 @@ We can perform all Dynamics 365 Web API actions using Client ID/ Client Secret i
 - Logic App definition:
 - Using HTTP request type action, we should be able to make a connection to CRM Web API
     - Here we need to pass the below values to make a successful connection
-        "authentication": {
-        "audience": "https://xxxxxxxxxxxx.crm.dynamics.com",
-        "authority": "https://login.windows.net/",
-        "clientId": "Client ID",
-        "secret": "Client Secret",
-        "tenant": "tenant.onmicrosoft.com",
-        "type": "ActiveDirectoryOAuth"
-        }
+
+            "authentication": {
+            "audience": "https://xxxxxxxxxxxx.crm.dynamics.com",
+            "authority": "https://login.windows.net/",
+            "clientId": "Client ID",
+            "secret": "Client Secret",
+            "tenant": "tenant.onmicrosoft.com",
+            "type": "ActiveDirectoryOAuth"
+            }
+        
 - This can replace the existing CRM connectors available
 
 ![alt text](https://github.com/anilvem1/CrmWebApiOAuth/blob/master/CRM%20API%20Request.png)
@@ -234,6 +236,7 @@ We can perform all Dynamics 365 Web API actions using Client ID/ Client Secret i
                         }
 
 - Sampe C# code to connect to Dynamics 365 Web API
+            
             using Newtonsoft.Json.Linq;
             using System;
             using System.Collections.Generic;
