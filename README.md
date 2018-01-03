@@ -32,7 +32,7 @@ Once done, required permissions should look like below
 - Create a new security role by copying an existing security role (e.g. System Administrator).
 - Go to Settings -> Security -> Users.
 - Select the view 'Application Users' and select New.
-- On the new user page, select User as 'Application User' is not already selected.
+- On the new user page, select User form as 'Application User' if not already selected.
 - Enter user details and click save. For example:
   - Application ID: `96ad00d5-0f07-4d35-bd69-82eb30798062`
   - Full Name: `CRM Application User`
