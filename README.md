@@ -1,76 +1,57 @@
 # Connect to Dynamics 365 Web API with AAD app-based authentication
 
-This document illustrates steps to authenticate with Dynamics 365 Web API (OData) service using an Azure Active Directory Application credentials. This is applicable to all the CRM versions 8.2 and later.
-
-## Introducing the Azure AD Application Identity for Dynamics 365 Web API
-
-Microsoft introduced the ability to authenticate Dynamics 365 Web API (OData) using an Azure Active Directory Application (Client ID/Client Secret). Azure AD application Together with a client secret, can replace username and password authentication in many scenarios.
-
-In a nutshell, it mitigates the risk of having username/password readable and thus less safe.
-For example, it could look like below:
-
-- Username: username@domain.com
-- Password: Password
-
-On the other hand, Client ID /Client Secret is difficult to comprehend making it safer.
-For example, it could look something like below
-
-- Client ID: 82068d67-54a7-4698-a4eb-876dcc70b3c1
-- Client Secret: BD|m_hIy461-E!p&;u0l@7sPCab?579LA`iP5ek|5rD]V
-
-We can perform all Dynamics 365 Web API actions using Client ID/ Client Secret instead of using the traditional username/password credentials.
+This document illustrates steps to authenticate with Dynamics 365 Web API (OData) service using an Azure Active Directory Application credentials. It is applicable to all the CRM versions 8.2 and later. Please find the steps below.
 
 ## Create an Azure AD Application
 
-- Log into Azure portal <https://portal.azure.com>
-- Go to Azure Active Directory -> App registrations
-- Click New application registration
-- Enter the below values
-  - Name: Name of the application
+- Log into Azure portal <https://portal.azure.com>.
+- Go to Azure Active Directory -> App registrations.
+- Click New application registration.
+- Enter below values:
+  - Name: `Name of the application`
   - Type: Web app / API
-  - Sign-on URL: Ex: <https://Nameofapplication>
-- Click Create
-- Note Client ID aka Application ID
-- Assign Dynamics CRM Online API access
-  - Click All Settings -> Required Permissions
-  - Click Add -> Select an API
-  - Select Dynamics CRM Online (Microsoft.CRM)
-  - Click Select
-  - Click Select permissions
-  - Select the checkbox ‘Access CRM Online as organization users’
-  - Click Select
-  - Click Done
-  - Assign Dynamics CRM Online API access rights
-- Once done, required permissions should look like below
+  - Sign-on URL: `https://<nameofapplication>`
+- Click Create.
+- Note the Application ID aka Client ID.
+
+## Enable application to access to Dynamics 365 API
+
+- On the registered app's page, click All Settings -> Required Permissions -> Add.
+- Under Select an API, select Dynamics CRM Online (Microsoft.CRM) and click Select.
+- Under Select permissions, select the checkbox 'Access CRM Online as organization users' and click Select.
+- Click Done.
+
+Once done, required permissions should look like below
 
 ![alt text](https://github.com/anilvem1/CrmWebApiOAuth/blob/master/AzureAD-CRM%20Permissions.png)
 
-## Create new Application User in Dynamics 365
+## Create new application user in Dynamics 365
 
-- Log into Dynamics 365 CRM application
-  - Pre-requisite: CRM version 8.2 and later
-- Go to Settings -> Security Roles
-- Create a new security role by copying an existing OOB security role (Ex: System Administrator)
-- Go to Settings -> Security -> Users
-- Select the view ‘Application Users’
-- Create CRM user via Security -> Users -> Application Users
-- Click New
-- Enter User Name as Client ID
-- Enter Full Name & Primary Email of your choice
-    - Ex: Full Name: CRM Application User & Primary Email: testemail@xxxxx.com
-- Click Save
-- Assign the above custom security role to this user account
-- Reference:  <https://msdn.microsoft.com/en-us/library/mt790170.aspx#bkmk_ManuallyCreateUser>
-- Example screenshot below
+- Log into Dynamics 365 application.
+- Go to Settings -> Security -> Security Roles.
+- Create a new security role by copying an existing security role (e.g. System Administrator).
+- Go to Settings -> Security -> Users.
+- Select the view 'Application Users' and select New.
+- On the new user page, select User as 'Application User' is not already selected.
+- Enter user details and click save. For example:
+  - Application ID: `96ad00d5-0f07-4d35-bd69-82eb30798062`
+  - Full Name: `CRM Application User`
+  - Primary Email: `testemail@example.com`
+- On user page, click 'Manage Roles' and assign custom security role to the user account.
+
+Reference:  <https://msdn.microsoft.com/en-us/library/mt790170.aspx#bkmk_ManuallyCreateUser>
+
+Example screenshot below
 
 ![alt text](https://github.com/anilvem1/CrmWebApiOAuth/blob/master/CRM%20Application%20User.png)
 
-## Connect to Dynamics 365 CRM using Application user account
+## Connect to Dynamics 365 using Application account
 
-- C# code:
-  - Connect to Dynamics 365 CRM Web API using client ID/ client secret
+- Using C# client:
+  - Connect to Dynamics 365 Web API using client ID and client secret.
   - Perform Web API operations such as CRUD, Execute and others
   - Please check in appendix for code sample
+
 - Logic App definition:
   - Using HTTP request type action, we should be able to make a connection to CRM Web API
     - Here we need to pass the below values to make a successful connection
@@ -116,179 +97,192 @@ We can perform all Dynamics 365 Web API actions using Client ID/ Client Secret i
 - Logic Apps examples can be found below
   - Connect to Dynamics 365 Web API – WhoAmI request:
 
-                    "actions": {
-                                "HTTP": {
-                                    "inputs": {
-                                        "authentication": {
-                                            "audience": "https://xxxx.crm.dynamics.com",
-                                            "authority": "https://login.windows.net/",
-                                            "clientId": "<ClientId goes here>",
-                                            "secret": " ClientSecret goes here ",
-                                            "tenant": "xxxxx.onmicrosoft.com",
-                                            "type": "ActiveDirectoryOAuth"
-                                        },
-                                        "method": "GET",
-                                        "uri": "https://xxxxxxxxx.api.crm.dynamics.com/api/data/v8.2/WhoAmI"
-                                    },
-                                    "runAfter": {},
-                                    "type": "Http"
-                                }
-                    }
+```js
+"actions": {
+  "HTTP": {
+    "inputs": {
+      "authentication": {
+        "audience": "https://xxxx.crm.dynamics.com",
+        "authority": "https://login.windows.net/",
+        "clientId": "<ClientId goes here>",
+        "secret": " ClientSecret goes here ",
+        "tenant": "xxxxx.onmicrosoft.com",
+        "type": "ActiveDirectoryOAuth"
+      },
+      "method": "GET",
+      "uri": "https://xxxxxxxxx.api.crm.dynamics.com/api/data/v8.2/WhoAmI"
+    },
+    "runAfter": {},
+    "type": "Http"
+  }
+}
+```
 
   - Connect to Dynamics 365 Web API: Get all changes to an entity via Change Tracking
 
-                    "actions": {
-                                "HTTP": {
-                                    "inputs": {
-                                        "authentication": {
-                                            "audience": "https://xxxx.crm.dynamics.com",
-                                            "authority": "https://login.windows.net/",
-                                            "clientId": "<ClientId goes here>",
-                                            "secret": " ClientSecret goes here ",
-                                            "tenant": "xxxxx.onmicrosoft.com",
-                                            "type": "ActiveDirectoryOAuth"
-                                        },
-                                        "headers": {
-                                            "Prefer": "odata.track-changes"
-                                        },
-                                        "method": "GET",
-                                        "uri": "https://xxxxx.api.crm.dynamics.com/api/data/v8.2/phonecalls"
-                                    },
-                                    "runAfter": {
-                                    },
-                                    "type": "Http"
-                                }
-                    }
+```js
+"actions": {
+  "HTTP": {
+    "inputs": {
+      "authentication": {
+        "audience": "https://xxxx.crm.dynamics.com",
+        "authority": "https://login.windows.net/",
+        "clientId": "<ClientId goes here>",
+        "secret": " ClientSecret goes here ",
+        "tenant": "xxxxx.onmicrosoft.com",
+        "type": "ActiveDirectoryOAuth"
+      },
+      "headers": {
+        "Prefer": "odata.track-changes"
+      },
+      "method": "GET",
+      "uri": "https://xxxxx.api.crm.dynamics.com/api/data/v8.2/phonecalls"
+    },
+    "runAfter": {},
+    "type": "Http"
+  }
+}
+```
 
   - Connect to Dynamics 365 Web API: Batch request
 
-                "actions": {
-                            "HTTP": {
-                                "inputs": {
-                                    "authentication": {
-                                        "audience": "https://xxx.crm.dynamics.com",
-                                        "authority": "https://login.windows.net/",
-                                        "clientId": "<ClientId goes here>",
-                                        "secret": " ClientSecret goes here ",
-                                        "tenant": "xxxxx.onmicrosoft.com",
-                                        "type": "ActiveDirectoryOAuth"
-                                    },
-                                    "body": "@join(variables('varPayload'),'\r\n')",
-                                    "headers": {
-                                        "Content-Type": "multipart/mixed;boundary=batch_AAA123"
-                                    },
-                                    "method": "POST",
-                                    "uri": "https://xxxxxx.api.crm.dynamics.com/api/data/v8.2/$batch"
-                                },
-                                "runAfter": {
-                                    "varPayload": [
-                                        "Succeeded"
-                                    ]
-                                },
-                                "type": "Http"
-                            },
-                            "varPayload": {
-                                "inputs": {
-                                    "variables": [
-                                        {
-                                            "name": "varPayload",
-                                            "type": "Array",
-                                            "value": [
-                                                "--batch_AAA123",
-                                                "Content-Type:multipart/mixed;boundary=changeset_AAA124",
-                                                "",
-                                                "--changeset_AAA124",
-                                                "Content-Type:application/http",
-                                                "Content-Transfer-Encoding:binary",
-                                                "Content-ID: 1",
-                                                "",
-                                                "POST https://xxxxx.api.crm.dynamics.com/api/data/v8.2/tasks HTTP/1.1",
-                                                "Content-Type:application/json;type=entry",
-                                                "",
-                                                "{\"subject\":\"Task 11 in batch\"}",
-                                                "--changeset_AAA124",
-                                                "Content-Type:application/http",
-                                                "Content-Transfer-Encoding:binary",
-                                                "Content-ID: 2",
-                                                "",
-                                                "POST https://xxxxxx.api.crm.dynamics.com/api/data/v8.2/tasks HTTP/1.1",
-                                                "Content-Type:application/json;type=entry",
-                                                "",
-                                                "{\"subject\":\"Task 12 in batch\"}",
-                                                "--changeset_AAA124",
-                                                "Content-Type:application/http",
-                                                "Content-Transfer-Encoding:binary",
-                                                "Content-ID: 3",
-                                                "",
-                                                "POST https://xxxxxxx.api.crm.dynamics.com/api/data/v8.2/tasks HTTP/1.1",
-                                                "Content-Type:application/json;type=entry",
-                                                "",
-                                                "{\"subject\":\"Task 13 in batch\"}",
-                                                "--changeset_AAA124--",
-                                                "",
-                                                "--batch_AAA123"
-                                            ]
-                                        }
-                                    ]
-                                },
-                                "runAfter": {},
-                                "type": "InitializeVariable"
-                            }
-                        }
+```js
+"actions": {
+  "HTTP": {
+    "inputs": {
+      "authentication": {
+        "audience": "https://xxx.crm.dynamics.com",
+        "authority": "https://login.windows.net/",
+        "clientId": "<ClientId goes here>",
+        "secret": " ClientSecret goes here ",
+        "tenant": "xxxxx.onmicrosoft.com",
+        "type": "ActiveDirectoryOAuth"
+      },
+      "body": "@join(variables('varPayload'),'\r\n')",
+      "headers": {
+        "Content-Type": "multipart/mixed;boundary=batch_AAA123"
+      },
+      "method": "POST",
+      "uri": "https://xxxxxx.api.crm.dynamics.com/api/data/v8.2/$batch"
+    },
+    "runAfter": {
+      "varPayload": [
+        "Succeeded"
+      ]
+    },
+    "type": "Http"
+  },
+  "varPayload": {
+    "inputs": {
+      "variables": [
+        {
+          "name": "varPayload",
+          "type": "Array",
+          "value": [
+            "--batch_AAA123",
+            "Content-Type:multipart/mixed;boundary=changeset_AAA124",
+            "",
+            "--changeset_AAA124",
+            "Content-Type:application/http",
+            "Content-Transfer-Encoding:binary",
+            "Content-ID: 1",
+            "",
+            "POST https://xxxxx.api.crm.dynamics.com/api/data/v8.2/tasks HTTP/1.1",
+            "Content-Type:application/json;type=entry",
+            "",
+            "{\"subject\":\"Task 11 in batch\"}",
+            "--changeset_AAA124",
+            "Content-Type:application/http",
+            "Content-Transfer-Encoding:binary",
+            "Content-ID: 2",
+            "",
+            "POST https://xxxxxx.api.crm.dynamics.com/api/data/v8.2/tasks HTTP/1.1",
+            "Content-Type:application/json;type=entry",
+            "",
+            "{\"subject\":\"Task 12 in batch\"}",
+            "--changeset_AAA124",
+            "Content-Type:application/http",
+            "Content-Transfer-Encoding:binary",
+            "Content-ID: 3",
+            "",
+            "POST https://xxxxxxx.api.crm.dynamics.com/api/data/v8.2/tasks HTTP/1.1",
+            "Content-Type:application/json;type=entry",
+            "",
+            "{\"subject\":\"Task 13 in batch\"}",
+            "--changeset_AAA124--",
+            "",
+            "--batch_AAA123"
+          ]
+        }
+      ]
+    },
+    "runAfter": {},
+    "type": "InitializeVariable"
+  }
+}
+```
 
-- Sampe C# code to connect to Dynamics 365 Web API
+- Sample C# code to connect to Dynamics 365 Web API
 
-            using Newtonsoft.Json.Linq;
-            using System;
-            using System.Collections.Generic;
-            using System.Configuration;
-            using System.Net.Http;
-            using System.Net.Http.Headers;
-            using System.Threading.Tasks;
+```csharp
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
-            namespace Crm9Apps
-            {
-                public static class CrmWebApiHelper
-                {
-                    static string authority = ConfigurationManager.AppSettings["ida:Authority"];  // the AD Authority used for login.  For example: https://login.microsoftonline.com/myadnamehere.onmicrosoft.com/oauth2/token
-                    static string clientId = ConfigurationManager.AppSettings["ida:ClientId"]; // the Application ID of this app.  This is a guid you can get from the Advanced Settings of your Auth setup in the portal
-                    static string clientSecret = ConfigurationManager.AppSettings["ida:ClientSecret"]; // the key you generate in Azure Active Directory for this application
-                    static string resource = ConfigurationManager.AppSettings["ida:Resource"]; // Ex: https://xxxxxxxxxxx.crm.dynamics.com
-                    private static readonly HttpClient httpClient = new HttpClient();
+namespace Crm9Apps
+{
+  public static class CrmWebApiHelper
+  {
+    // AD Authority used for login.  For example: https://login.microsoftonline.com/myadnamehere.onmicrosoft.com/oauth2/token
+    static string authority = ConfigurationManager.AppSettings["ida:Authority"];
 
-                    public static async Task<string> CrmAuthToken()
-                    {
-                        string accessToken = string.Empty;
-                        var values = new Dictionary<string, string>{
-                            { "grant_type", "client_credentials" },
-                            { "client_id", clientId },
-                            { "client_secret", clientSecret },
-                            {"resource", resource}
-                        };
+    // Application ID of this app. This is a guid you can get from the Advanced Settings of your Auth setup in the portal.
+    static string clientId = ConfigurationManager.AppSettings["ida:ClientId"];
 
-                        var content = new FormUrlEncodedContent(values);
-                        var response = await httpClient.PostAsync("https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/oauth2/token", content);
-                        var responseString = await response.Content.ReadAsStringAsync();
-                        dynamic responseJsonStr = JObject.Parse(responseString);
-                        accessToken = responseJsonStr.access_token;
-                        return accessToken;
-                    }
-                    public static async Task<Guid> CrmWhoAmI()
-                    {
-                        Guid userId = Guid.Empty;
-                        //Default Request Headers needed to be added in the HttpClient Object
-                        httpClient.DefaultRequestHeaders.Add("OData-MaxVersion", "4.0");
-                        httpClient.DefaultRequestHeaders.Add("OData-Version", "4.0");
-                        httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+    // Key you generate in Azure Active Directory for this application.
+    static string clientSecret = ConfigurationManager.AppSettings["ida:ClientSecret"]; 
+    static string resource = ConfigurationManager.AppSettings["ida:Resource"];
+    private static readonly HttpClient httpClient = new HttpClient();
 
-                        //Set the Authorization header with the Access Token received specifying the Credentials
-                        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await CrmAuthToken());
-                        var response = await httpClient.GetAsync(resource+ "/api/data/v8.2/WhoAmI");
+    public static async Task<string> CrmAuthToken()
+    {
+      string accessToken = string.Empty;
+      var values = new Dictionary<string, string>{
+              { "grant_type", "client_credentials" },
+              { "client_id", clientId },
+              { "client_secret", clientSecret },
+              {"resource", resource}
+            };
 
-                        var responseString = await response.Content.ReadAsStringAsync();
-                        dynamic responseJsonStr = JObject.Parse(responseString);
-                        userId = responseJsonStr.UserId;
-                        return userId;
-                    }
-                }
-            }
+      var content = new FormUrlEncodedContent(values);
+      var response = await httpClient.PostAsync("https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/oauth2/token", content);
+      var responseString = await response.Content.ReadAsStringAsync();
+      dynamic responseJsonStr = JObject.Parse(responseString);
+      accessToken = responseJsonStr.access_token;
+      return accessToken;
+    }
+
+    public static async Task<Guid> CrmWhoAmI()
+    {
+      Guid userId = Guid.Empty;
+      //Default Request Headers needed to be added in the HttpClient object.
+      httpClient.DefaultRequestHeaders.Add("OData-MaxVersion", "4.0");
+      httpClient.DefaultRequestHeaders.Add("OData-Version", "4.0");
+      httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+      // Set the Authorization header with the Access Token received specifying the credentials.
+      httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await CrmAuthToken());
+      var response = await httpClient.GetAsync(resource + "/api/data/v8.2/WhoAmI");
+
+      var responseString = await response.Content.ReadAsStringAsync();
+      dynamic responseJsonStr = JObject.Parse(responseString);
+      userId = responseJsonStr.UserId;
+      return userId;
+    }
+  }
+}
+```
