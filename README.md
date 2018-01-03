@@ -23,7 +23,7 @@ This document illustrates steps to authenticate with Dynamics 365 Web API (OData
 
 Once done, required permissions should look like below
 
-![Azure AD CRM Permissions](https://github.com/anilvem1/CrmWebApiOAuth/blob/master/AzureAD-CRM%20Permissions.png)
+![Azure AD CRM Permissions](AzureAD-CRM%20Permissions.png)
 
 ## Create new application user in Dynamics 365
 
@@ -43,7 +43,7 @@ Reference:  <https://msdn.microsoft.com/en-us/library/mt790170.aspx#bkmk_Manuall
 
 Example screenshot below.
 
-![CRM Application User](https://github.com/anilvem1/CrmWebApiOAuth/blob/master/CRM%20Application%20User.png)
+![CRM Application User](CRM%20Application%20User.png)
 
 ## Connect to Dynamics 365 using Application account
 
@@ -136,7 +136,7 @@ Create an 'HTTP request' action and pass below values to make a successful conne
 - It is possible to send multiple request by composing a Web API batch request.
 - It can execute FetchXML requests, user queries and saved queries via Web API.
 
-![CRM API Request](https://github.com/anilvem1/CrmWebApiOAuth/blob/master/CRM%20API%20Request.png)
+![CRM API Request](CRM%20API%20Request.png)
 
 Documentation on CRM connector for Logic Apps can be found [here](https://docs.microsoft.com/en-us/azure/connectors/connectors-create-api-crmonline).
 
